@@ -1,0 +1,40 @@
+name: '"Analyze" Action For GitHub Actions'
+description: 'Runs an analysis on a project using the Ion Channel API.'
+branding:
+  icon: 'search'
+  color: 'blue'
+inputs:
+  branch:
+    descripton: 'The branch to checkout, if analyzing a Git project'
+    required: false
+  secret-key:
+    description: 'Ion Channel secret key'
+    required: false
+  config:
+    description: 'Path to a .ionize.yml file'
+    required: true
+    default: '.ionize.yaml'
+  timeout:
+    description: >-
+      Amount of time in seconds to wait for the analysis to complete before canceling.
+      A timeout of zero seconds disables the timeout. Default: 1200 seconds (20 minutes)
+    required: true
+    default: 1200
+  api-base-url:
+    description: 'Ion Channel API base URL'
+    required: true
+    default: 'https://api.ionchannel.io'
+runs:
+  using: 'docker'
+  image: 'docker://ionchannel/ionize'
+  env:
+    IONCHANNEL_SECRET_KEY: ${{ inputs.secret-key }}
+    IONCHANNEL_ENDPOINT_URL: ${{ inputs.api-base-url }}
+    GIT_BRANCH: ${{ inputs.branch }}
+  args:
+    - '/ionize'
+    - '--config'
+    - ${{ inputs.config }}
+    - 'analyze'
+    - '--timeout'
+    - ${{ inputs.timeout }}
