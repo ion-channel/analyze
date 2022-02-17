@@ -24,3 +24,31 @@ An `.ionize.yml` file should look like this:
 team: df47e4d1-1926-4990-8ef8-f326be59d6fd
 project: 8b5f1c3b-ac29-4dfb-b735-a7bf51120594
 ```
+
+If you are using this action in a workflow run triggered by a `pull_request` event rather than a `push` event,
+you will likely want to use `github.head_ref` to get the source branch name, rather than `github.ref_name`.
+
+Here is a full example workflow that runs on pull requests targeting the `develop` and `main` branches:
+
+```yml
+name: Analyze
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  analysis:
+    name: Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Analyze
+        uses: ion-channel/analyze@v1
+        with:
+          branch: ${{ github.head_ref }}
+          secret-key: ${{ secrets.IONCHANNEL_SECRET_KEY_PROD }}
+```
