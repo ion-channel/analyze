@@ -16,6 +16,8 @@ as simple as adding the following step to your workflow:
 If your `.ionize.yml` file has a different name, or isn't in the root directory of your repo,
 you can specify the path to it by adding `config: path/to/my_ionize.yml` to the step's `with:` block.
 
+See the [action.yml](action.yml) file for a list of all the action's inputs.
+
 An `.ionize.yml` file should look like this:
 
 ```yml
